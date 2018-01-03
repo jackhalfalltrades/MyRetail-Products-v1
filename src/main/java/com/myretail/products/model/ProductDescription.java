@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -17,6 +18,7 @@ public class ProductDescription implements Serializable {
 
     private final static long serialVersionUID = -93258022922430261L;
 
+    @NotNull
     private String title;
 
 }

@@ -9,11 +9,12 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
-import rx.Observable
+import org.springframework.web.bind.MethodArgumentNotValidException
 import spock.lang.Shared
 import spock.lang.Specification
 
 import javax.annotation.Resource
+import java.lang.reflect.Method
 
 class ProductsControllerSpec extends Specification {
 
@@ -55,13 +56,13 @@ class ProductsControllerSpec extends Specification {
 
     def 'test get product details not found'() {
         setup:
-        productsServiceImplMock.getProductDetails(new Payload("13861428")) >> { new ResourceNotFoundException() }
+        productsServiceImplMock.getProductDetails(new Payload("12345")) >> { throw new ResourceNotFoundException() }
 
         when:
-        def response = mockMvc.perform(MockMvcRequestBuilders.get("/myretail/product/13861428").contentType("application/json")).andReturn().response
+        def response = mockMvc.perform(MockMvcRequestBuilders.get("/myretail/product/12345").contentType("application/json")).andReturn().response
 
         then:
-        thrown(ResourceNotFoundException)
+        response.status == 404
     }
 
     def 'test get product price details'() {
@@ -79,13 +80,13 @@ class ProductsControllerSpec extends Specification {
         productContent?.currency_code == expectedProduct?.getCurrencyCode()
     }
 
-    def 'test insert product price details'() {
+    def 'test save product price details'() {
         setup:
         Product expectedProduct = new Product("13860428", "15.49", "USD")
         String requestBody = "{\"product_id\":\"13860428\",\"value\":\"15.49\",\"currency_code\":\"USD\"}"
 
         when:
-        def product = mockMvc.perform(MockMvcRequestBuilders.post("/myretail/product").content(requestBody).contentType("application/json")).andReturn().response
+        def product = mockMvc.perform(MockMvcRequestBuilders.post("/myretail/product/price").content(requestBody).contentType("application/json")).andReturn().response
         def productContent = new JsonSlurper().parseText(product.contentAsString)
 
         then:
@@ -93,6 +94,18 @@ class ProductsControllerSpec extends Specification {
         productContent?.product_id == expectedProduct?.get_id()
         productContent?.value == expectedProduct?.getPrice()
         productContent?.currency_code == expectedProduct?.getCurrencyCode()
+    }
+
+    def 'test save product price details with invalid request'() {
+        setup:
+        productsServiceImplMock.insertProductPrice(new Product()) >> { throw new MethodArgumentNotValidException() }
+
+        when:
+        def response = mockMvc.perform(MockMvcRequestBuilders.post("/myretail/product/price").content("{}").contentType("application/json")).andReturn().response
+
+        then:
+        response.status == 400
+
     }
 
     def 'update product price details'() {

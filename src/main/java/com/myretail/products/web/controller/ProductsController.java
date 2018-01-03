@@ -5,6 +5,7 @@ import com.myretail.products.model.Payload;
 import com.myretail.products.model.Product;
 import com.myretail.products.model.ProductResponse;
 import com.myretail.products.service.ProductsServiceImpl;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -25,40 +26,41 @@ public class ProductsController {
     }
 
     // get combined productDetails details form external API and Mongo DB
+    @ApiOperation("fetch product details")
     @GetMapping(value = "/product/{id}", produces =
             MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ProductResponse getProductDetails(@Valid Payload payload) {
+    ProductResponse getProductDetails (@Valid Payload payload) {
 
-        LOGGER.debug("Payload:{}", payload.toString());
+        LOGGER.debug("Product:{}", payload.toString());
          return productsServiceImpl.getProductDetails(payload);
     }
 
-    //  insert product price details into Mongo DB
-    @PostMapping(value = "/product", consumes = MediaType.APPLICATION_JSON_VALUE, produces =
+    @ApiOperation("insert product price")
+    @PostMapping(value = "/product/price", consumes = MediaType.APPLICATION_JSON_VALUE, produces =
             MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     Product insertProductPrice(@Valid @RequestBody Product product) {
 
-        LOGGER.debug("payload:{}", product.toString());
+        LOGGER.debug("Product:{}", product.toString());
         return productsServiceImpl.insertProductPrice(product);
     }
 
-    // query product price details form Mongo DB by ID
+    @ApiOperation("query product price")
     @GetMapping(value = "/product/price/{id}", produces =
             MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     Product queryProductPriceByID(@Valid Payload payload) {
 
-        LOGGER.debug("Payload:{}", payload.toString());
+        LOGGER.debug("Product:{}", payload.toString());
         return productsServiceImpl.queryProductPriceByID(payload.getId());
     }
 
-    // update product price details in Mongo DB by ID
-    @PutMapping(value = "/product/{product_id}", produces =
+    @ApiOperation("update product price")
+    @PutMapping(value = "/product/{id}", produces =
             MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    Product updateProductDetails(@Valid @RequestBody Product product) {
+    Product updateProductPrice(@Valid @RequestBody Product product) {
 
         LOGGER.debug("Product:{}", product.toString());
         return productsServiceImpl.updateProductPrice(product);
