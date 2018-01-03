@@ -9,10 +9,10 @@ caller.
 
 Generated project characteristics
 -------------------------
-* No-xml Spring RST API
+* No-xml Spring REST API
 * Spring Rest Template
 * Spring Data
-* SPOCK/Groovy
+* Spock/Groovy
 * MongoDB (Embedded Mongo DB)
 
 Prerequisites

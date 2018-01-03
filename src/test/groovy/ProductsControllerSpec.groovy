@@ -13,9 +13,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import spock.lang.Shared
 import spock.lang.Specification
 
-import javax.annotation.Resource
-import java.lang.reflect.Method
-
 class ProductsControllerSpec extends Specification {
 
     @Shared

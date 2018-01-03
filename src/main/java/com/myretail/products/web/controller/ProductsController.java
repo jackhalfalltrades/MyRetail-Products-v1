@@ -29,10 +29,10 @@ public class ProductsController {
     @GetMapping(value = "/product/{id}", produces =
             MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ProductResponse getProductDetails (@Valid Payload payload) {
+    ProductResponse getProductDetails(@Valid Payload payload) {
 
-        LOGGER.debug("Product:{}", payload.toString());
-         return productsServiceImpl.getProductDetails(payload);
+        LOGGER.debug("Product:{}", payload);
+        return productsServiceImpl.getProductDetails(payload);
     }
 
     @ApiOperation("insert product price")
@@ -41,7 +41,7 @@ public class ProductsController {
     public @ResponseBody
     Product insertProductPrice(@Valid @RequestBody Product product) {
 
-        LOGGER.debug("Product:{}", product.toString());
+        LOGGER.debug("Product:{}", product);
         return productsServiceImpl.insertProductPrice(product);
     }
 
@@ -51,7 +51,7 @@ public class ProductsController {
     public @ResponseBody
     Product queryProductPriceByID(@Valid Payload payload) {
 
-        LOGGER.debug("Product:{}", payload.toString());
+        LOGGER.debug("Product:{}", payload);
         return productsServiceImpl.queryProductPriceByID(payload.getId());
     }
 
@@ -61,7 +61,7 @@ public class ProductsController {
     public @ResponseBody
     Product updateProductPrice(@Valid @RequestBody Product product) {
 
-        LOGGER.debug("Product:{}", product.toString());
+        LOGGER.debug("Product:{}", product);
         return productsServiceImpl.updateProductPrice(product);
     }
 
