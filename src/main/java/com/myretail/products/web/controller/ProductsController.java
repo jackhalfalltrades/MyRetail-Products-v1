@@ -45,16 +45,6 @@ public class ProductsController {
         return productsServiceImpl.insertProductPrice(product);
     }
 
-    @ApiOperation("query product price")
-    @GetMapping(value = "/product/price/{id}", produces =
-            MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Product queryProductPriceByID(@Valid Payload payload) {
-
-        LOGGER.debug("Product:{}", payload);
-        return productsServiceImpl.queryProductPriceByID(payload.getId());
-    }
-
     @ApiOperation("update product price")
     @PutMapping(value = "/product/{id}", produces =
             MediaType.APPLICATION_JSON_VALUE)

@@ -1,4 +1,4 @@
-package com.myretail.products.configuration;
+package com.myretail.products.config;
 
 import com.mongodb.MongoClient;
 import cz.jirutka.spring.embedmongo.EmbeddedMongoFactoryBean;
@@ -16,7 +16,7 @@ import java.io.IOException;
 
 @EnableSwagger2
 @Configuration
-public class SpringConfiguration {
+public class AppConfig {
 
     private static final String MONGO_DB_URL = "localhost";
     private static final String MONGO_DB_NAME = "embedded_db";

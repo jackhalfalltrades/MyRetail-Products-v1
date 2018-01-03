@@ -10,7 +10,5 @@ public interface ProductsService {
 
     Product insertProductPrice(Product product);
 
-    Product queryProductPriceByID(String productId);
-
     Product updateProductPrice(Product product);
 }

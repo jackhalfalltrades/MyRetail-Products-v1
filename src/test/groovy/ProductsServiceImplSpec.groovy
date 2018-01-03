@@ -1,3 +1,4 @@
+import com.myretail.products.exception.EntityNotFoundException
 import com.myretail.products.model.*
 import com.myretail.products.repository.ProductsRepository
 import com.myretail.products.service.ProductsServiceImpl

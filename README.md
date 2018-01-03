@@ -25,10 +25,48 @@ Prerequisites
 Run the Project
 -----------
 
-`Navigate to the project directory and issue maven run command: ``mvn spring-boot:run``
+Navigate to the project directory and issue maven run command: 
+to build issue the maven command: ``mvn clean install`` 
+to run the project issue the maven command:``mvn spring-boot:run``
 
 
 Test in the browser
 ---------------
 
 Project API usage and documentation avaiable @ http://localhost:11080/swagger-ui.html
+
+Sample requests
+---------------
+
+``Save product price``
+
+request type: POST
+
+url: http://localhost:11080/myretail/product/price
+
+payload:
+{
+"product_id" : "13860428",
+"value":"15.49",
+"currency_code":"USD"
+}
+
+``Update product price``
+
+request type: PUT
+
+url: http://localhost:11080/myretail/product/13860428
+
+payload:
+{
+"product_id" : "13860428",
+"value":"15.49",
+"currency_code":"USD"
+}
+
+``Fetch product details``
+
+
+request type: GET
+
+url: http://localhost:11080/myretail/product/13860428

@@ -62,21 +62,6 @@ class ProductsControllerSpec extends Specification {
         response.status == 404
     }
 
-    def 'test get product price details'() {
-        setup:
-        Product expectedProduct = new Product("13860428", "15.49", "USD")
-
-        when:
-        def product = mockMvc.perform(MockMvcRequestBuilders.get("/myretail/product/price/13861428").contentType("application/json")).andReturn().response
-        def productContent = new JsonSlurper().parseText(product.contentAsString)
-
-        then:
-        1 * productsServiceImplMock.queryProductPriceByID(_ as String) >> expectedProduct
-        productContent?.product_id == expectedProduct?.get_id()
-        productContent?.value == expectedProduct?.getPrice()
-        productContent?.currency_code == expectedProduct?.getCurrencyCode()
-    }
-
     def 'test save product price details'() {
         setup:
         Product expectedProduct = new Product("13860428", "15.49", "USD")

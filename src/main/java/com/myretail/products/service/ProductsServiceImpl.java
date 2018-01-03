@@ -1,5 +1,6 @@
 package com.myretail.products.service;
 
+import com.myretail.products.exception.EntityNotFoundException;
 import com.myretail.products.model.*;
 import com.myretail.products.repository.ProductsRepository;
 import org.apache.commons.lang.StringUtils;
@@ -74,7 +75,8 @@ public class ProductsServiceImpl implements ProductsService {
         return productsRepository.save(product);
     }
 
-    public Product queryProductPriceByID(String productId) {
+
+    private Product queryProductPriceByID(String productId) {
         Product product = productsRepository.findOne(productId);
         if (product == null)
             throw new EntityNotFoundException("ProductPrice not found for " + productId);
