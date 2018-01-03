@@ -25,10 +25,10 @@ Prerequisites
 Run the Project
 -----------
 
-`mvn spring-boot:run`
+`Navigate to the project directory and issue maven run command: ``mvn spring-boot:run``
 
 
 Test in the browser
 ---------------
 
-Project API usage and documentation avaiable @ http://11080/swagger-ui.html
+Project API usage and documentation avaiable @ http://localhost:11080/swagger-ui.html

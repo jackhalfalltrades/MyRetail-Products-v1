@@ -25,7 +25,6 @@ public class ProductsController {
         this.productsServiceImpl = productsServiceImpl;
     }
 
-    // get combined productDetails details form external API and Mongo DB
     @ApiOperation("fetch product details")
     @GetMapping(value = "/product/{id}", produces =
             MediaType.APPLICATION_JSON_VALUE)
