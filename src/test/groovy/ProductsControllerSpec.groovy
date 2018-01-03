@@ -55,6 +55,31 @@ class ProductsControllerSpec extends Specification {
         content?.current_price?.value == expectedResponse.getCurrentPrice().getValue()
     }
 
+    def 'test get product details not found'() {
+        setup:
+
+        ProductResponse expectedResponse = new ProductResponse()
+
+        expectedResponse.setProductId("13860428")
+        expectedResponse.setProductName("The Big Lebowski (Blu-ray)")
+        expectedResponse.setCurrentPrice(CurrentPrice.builder().value("15.49").currencyCode("USD").build())
+
+        when:
+        def response = mockMvc.perform(MockMvcRequestBuilders.get("/myretail/product/13861428").contentType("application/json")).andReturn().response
+        def content = new JsonSlurper().parseText(response.contentAsString)
+
+        then:
+
+        1 * productsServiceImplMock.getProductDetails(_ as Payload) >> Observable.just(expectedResponse)
+
+        println(content)
+
+        //content?.id == expectedResponse.getProductId()
+        //content?.name == expectedResponse.getProductName()
+        //content?.current_price?.currency_code == expectedResponse.getCurrentPrice().getCurrencyCode()
+        //content?.current_price?.value == expectedResponse.getCurrentPrice().getValue()
+    }
+
     def 'test get product price details'() {
         setup:
 
