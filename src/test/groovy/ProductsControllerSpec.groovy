@@ -5,12 +5,15 @@ import com.myretail.products.model.ProductResponse
 import com.myretail.products.service.ProductsServiceImpl
 import com.myretail.products.web.controller.ProductsController
 import groovy.json.JsonSlurper
+import org.springframework.data.rest.webmvc.ResourceNotFoundException
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import rx.Observable
 import spock.lang.Shared
 import spock.lang.Specification
+
+import javax.annotation.Resource
 
 class ProductsControllerSpec extends Specification {
 
@@ -22,6 +25,7 @@ class ProductsControllerSpec extends Specification {
 
     @Shared
     MockMvc mockMvc
+
 
     def setup() {
         productsServiceImplMock = Mock(ProductsServiceImpl)
@@ -51,21 +55,13 @@ class ProductsControllerSpec extends Specification {
 
     def 'test get product details not found'() {
         setup:
-        ProductResponse expectedResponse = new ProductResponse()
-        expectedResponse.setProductId("13860428")
-        expectedResponse.setProductName("The Big Lebowski (Blu-ray)")
-        expectedResponse.setCurrentPrice(CurrentPrice.builder().value("15.49").currencyCode("USD").build())
+        productsServiceImplMock.getProductDetails(new Payload("13861428")) >> { new ResourceNotFoundException() }
 
         when:
         def response = mockMvc.perform(MockMvcRequestBuilders.get("/myretail/product/13861428").contentType("application/json")).andReturn().response
-        def content = new JsonSlurper().parseText(response.contentAsString)
 
         then:
-        1 * productsServiceImplMock.getProductDetails(_ as Payload) >> expectedResponse
-        content?.id == expectedResponse.getProductId()
-        content?.name == expectedResponse.getProductName()
-        content?.current_price?.currency_code == expectedResponse.getCurrentPrice().getCurrencyCode()
-        content?.current_price?.value == expectedResponse.getCurrentPrice().getValue()
+        thrown(ResourceNotFoundException)
     }
 
     def 'test get product price details'() {
