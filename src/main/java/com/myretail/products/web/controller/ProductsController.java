@@ -1,16 +1,14 @@
 package com.myretail.products.web.controller;
 
 
-import com.myretail.products.entity.Product;
 import com.myretail.products.model.Payload;
+import com.myretail.products.model.Product;
 import com.myretail.products.model.ProductResponse;
 import com.myretail.products.service.ProductsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.async.DeferredResult;
-import rx.Observable;
 
 import javax.validation.Valid;
 
@@ -33,8 +31,7 @@ public class ProductsController {
     ProductResponse getProductDetails(@Valid Payload payload) {
 
         LOGGER.debug("Payload:{}", payload.toString());
-        Observable<ProductResponse> o = productsServiceImpl.getProductDetails(payload);
-        return o.toBlocking().single();
+         return productsServiceImpl.getProductDetails(payload);
     }
 
     //  insert product price details into Mongo DB

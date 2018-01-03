@@ -1,21 +1,13 @@
 package com.myretail.products.service;
 
-import com.myretail.products.entity.Product;
-import com.myretail.products.exception.EntityNotFoundException;
 import com.myretail.products.model.*;
 import com.myretail.products.repository.ProductsRepository;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.client.HttpClientErrorException;
 import rx.Observable;
-import sun.util.resources.cldr.ebu.CurrencyNames_ebu;
 
 import java.util.Optional;
 
@@ -41,7 +33,7 @@ public class ProductsServiceImpl implements ProductsService {
     }
 
     @Override
-    public Observable<ProductResponse> getProductDetails(Payload payload) {
+    public ProductResponse getProductDetails(Payload payload) {
 
         Observable<Product> productObservable = Observable.fromCallable(() ->
                 queryProductPriceByID(payload.getId())
@@ -65,7 +57,7 @@ public class ProductsServiceImpl implements ProductsService {
                     .currencyCode(product.getCurrencyCode())
                     .build());
             return productResponse;
-        });
+        }).toBlocking().single();
     }
 
     @Override

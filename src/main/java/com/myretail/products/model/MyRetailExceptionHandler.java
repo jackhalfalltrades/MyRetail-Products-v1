@@ -1,6 +1,5 @@
-package com.myretail.products.exception;
+package com.myretail.products.model;
 
-import com.myretail.products.error.MyRetailError;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

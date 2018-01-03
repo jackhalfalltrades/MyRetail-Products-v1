@@ -1,4 +1,4 @@
-package com.myretail.products.error;
+package com.myretail.products.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

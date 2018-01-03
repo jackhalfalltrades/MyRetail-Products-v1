@@ -3,7 +3,10 @@ package com.myretail.products.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.io.Serializable;
 
@@ -19,4 +22,5 @@ public class CurrentPrice implements Serializable {
 
     @JsonProperty("currency_code")
     private String currencyCode;
+
 }

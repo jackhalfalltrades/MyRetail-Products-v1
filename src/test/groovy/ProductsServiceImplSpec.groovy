@@ -1,18 +1,8 @@
-import com.myretail.products.entity.Product
-import com.myretail.products.exception.EntityNotFoundException
-import com.myretail.products.model.CurrentPrice
-import com.myretail.products.model.Item
-import com.myretail.products.model.Payload
-import com.myretail.products.model.ProductDescription
-import com.myretail.products.model.ProductDetails
-import com.myretail.products.model.ProductResponse
-import com.myretail.products.model.Root
+import com.myretail.products.model.*
 import com.myretail.products.repository.ProductsRepository
 import com.myretail.products.service.ProductsServiceImpl
 import org.springframework.data.rest.webmvc.ResourceNotFoundException
 import org.springframework.web.client.RestTemplate
-import rx.exceptions.OnErrorNotImplementedException
-import rx.Observable
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -27,28 +17,26 @@ class ProductsServiceImplSpec extends Specification {
     @Shared
     RestTemplate restTemplateMock
 
+    @Shared
+    Payload payload
+
     def setup() {
         productsRepositoryMock = Mock(ProductsRepository)
         restTemplateMock = Mock(RestTemplate)
         productsService = new ProductsServiceImpl()
         productsService.setProductsRepository(productsRepositoryMock)
         productsService.setRestTemplate(restTemplateMock)
+        payload = new Payload("13860428")
     }
 
     def 'test get product details'() {
         setup:
-
-        Payload payload = new Payload("13860428")
-
-        ProductDescription productDescription = new ProductDescription("The Big Lebowski (Blu-ray)")
-        Root expectedRoot = new Root(new ProductDetails(new Item(productDescription)))
-        String url = "http://redsky.target.com/v2/pdp/tcin/"
-        ProductResponse expectedResponse = new ProductResponse()
+        def productDescription = new ProductDescription("The Big Lebowski (Blu-ray)")
+        def expectedRoot = new Root(new ProductDetails(new Item(productDescription)))
+        def expectedResponse = new ProductResponse()
         expectedResponse.setProductId("13860428")
         expectedResponse.setProductName("The Big Lebowski (Blu-ray)")
         expectedResponse.setCurrentPrice(CurrentPrice.builder().value("15.49").currencyCode("USD").build())
-        Observable<ProductResponse> expectedObservable = Observable.just(expectedResponse)
-
         def expectedProduct = new Product("13860428", "15.49", "USD")
 
 
@@ -56,40 +44,31 @@ class ProductsServiceImplSpec extends Specification {
         def response = productsService.getProductDetails(payload)
 
         then:
-
-        //response == expectedObservable
+        response == expectedResponse
         _ * restTemplateMock.getForObject(_, _) >> expectedRoot
         _ * productsRepositoryMock.findOne(payload?.getId()) >> expectedProduct
     }
 
     def 'test get product details entity not found exception'() {
         setup:
-
-        Payload payload = new Payload("13860428")
-
         productsRepositoryMock.findOne(payload?.getId()) >> { throw new EntityNotFoundException("Product price not found for " + payload?.getId())}
 
         when:
-        def response = productsService.getProductDetails(payload).subscribe()
+        def response = productsService.getProductDetails(payload)
 
         then:
-
-        thrown(OnErrorNotImplementedException)
-
+        thrown(EntityNotFoundException)
     }
 
     def 'test get product details resource not found exception'() {
         setup:
-
-        Payload payload = new Payload("13860428")
-
         restTemplateMock.getForObject(_, _) >> { throw new ResourceNotFoundException()}
 
         when:
-        def response = productsService.getProductDetails(payload).subscribe()
+        def response = productsService.getProductDetails(payload)
 
         then:
+        thrown(ResourceNotFoundException)
 
-        thrown(OnErrorNotImplementedException)
     }
 }
